@@ -15408,7 +15408,7 @@
           "id" : 26,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 98,
+            "line" : 100,
             "column" : 12,
             "source_fragment" : "standard_metadata.ingress_port != 255 && ..."
           },
@@ -15488,7 +15488,7 @@
           "id" : 27,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 102,
+            "line" : 104,
             "column" : 16,
             "source_fragment" : "fabric_metadata.int_meta.source == true"
           },
@@ -15521,7 +15521,7 @@
           "id" : 28,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 106,
+            "line" : 108,
             "column" : 15,
             "source_fragment" : "hdr.int_header.isValid()"
           },

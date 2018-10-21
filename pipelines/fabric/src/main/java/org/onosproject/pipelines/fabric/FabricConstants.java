@@ -69,6 +69,8 @@ public final class FabricConstants {
             PiMatchFieldId.of("fabric_metadata.ip_proto");
     public static final PiMatchFieldId FABRIC_METADATA_NEXT_ID =
             PiMatchFieldId.of("fabric_metadata.next_id");
+    public static final PiMatchFieldId STANDARD_METADATA_INSTANCE_TYPE =
+            PiMatchFieldId.of("standard_metadata.instance_type");
     public static final PiMatchFieldId HDR_IPV4_SRC_ADDR =
             PiMatchFieldId.of("hdr.ipv4.src_addr");
     public static final PiMatchFieldId HDR_INT_HEADER_INSTRUCTION_MASK_0407 =
@@ -339,6 +341,8 @@ public final class FabricConstants {
     public static final PiActionProfileId FABRIC_INGRESS_NEXT_ECMP_SELECTOR =
             PiActionProfileId.of("FabricIngress.next.ecmp_selector");
     // Packet Metadata IDs
+    public static final PiControlMetadataId _PAD =
+            PiControlMetadataId.of("_pad");
     public static final PiControlMetadataId INGRESS_PORT =
             PiControlMetadataId.of("ingress_port");
     public static final PiControlMetadataId EGRESS_PORT =

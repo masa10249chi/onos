@@ -112,9 +112,10 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
             log.warn("Missing GeneralProviderDevice config for {}", deviceId);
             return false;
         }
-        final String switchId = cfg.protocolsInfo().containsKey("int") ?
-                cfg.protocolsInfo().get("int").configValues().get("switchId")
-                : null;
+        // final String switchId = cfg.protocolsInfo().containsKey("int") ?
+        //        cfg.protocolsInfo().get("int").configValues().get("switchId")
+        //        : null;
+        final String switchId = deviceId.toString().substring(deviceId.toString().length() - 3);
         if (switchId == null || switchId.isEmpty()) {
             log.warn("Missing INT device config for {}", deviceId);
             return false;
@@ -197,10 +198,11 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
             return false;
         }
 
-        PiCriterion egressCriterion = PiCriterion.builder()
-                .matchExact(FabricConstants.STANDARD_METADATA_EGRESS_PORT, port.toLong())
-                .build();
-        TrafficSelector sinkSelector = DefaultTrafficSelector.builder()
+	PiCriterion egressCriterion = PiCriterion.builder()
+        	// .matchExact(FabricConstants.STANDARD_METADATA_EGRESS_PORT, port.toLong())
+        	.matchExact(FabricConstants.STANDARD_METADATA_EGRESS_SPEC, port.toLong())
+	        .build();
+	TrafficSelector sinkSelector = DefaultTrafficSelector.builder()
                 .matchPi(egressCriterion)
                 .build();
         PiAction setSinkAct = PiAction.builder()
@@ -269,7 +271,7 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
     @Override
     public boolean supportsFunctionality(IntFunctionality functionality) {
         // Sink not fully supported yet.
-        return functionality == IntFunctionality.SOURCE || functionality == IntFunctionality.TRANSIT;
+        return functionality == IntFunctionality.SOURCE || functionality == IntFunctionality.TRANSIT || functionality == IntFunctionality.SINK;
     }
 
     private FlowRule buildWatchlistEntry(IntObjective obj) {
@@ -428,16 +430,16 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
 
     private boolean setupIntReportInternal(IntConfig cfg) {
         // Report not fully supported yet.
-        return true;
-        // FlowRule reportRule = buildReportEntry(cfg, PKT_INSTANCE_TYPE_INGRESS_CLONE);
-        // if (reportRule != null) {
-        //     flowRuleService.applyFlowRules(reportRule);
-        //     log.info("Report entry {} has been added to {}", reportRule, this.data().deviceId());
-        //     return true;
-        // } else {
-        //     log.warn("Failed to add report entry on {}", this.data().deviceId());
-        //     return false;
-        // }
+        // return true;
+        FlowRule reportRule = buildReportEntry(cfg, PKT_INSTANCE_TYPE_INGRESS_CLONE);
+        if (reportRule != null) {
+             flowRuleService.applyFlowRules(reportRule);
+             log.info("Report entry {} has been added to {}", reportRule, this.data().deviceId());
+             return true;
+         } else {
+             log.warn("Failed to add report entry on {}", this.data().deviceId());
+             return false;
+         }
     }
 
     private FlowRule buildReportEntry(IntConfig cfg, int type) {
@@ -446,6 +448,12 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
             return null;
         }
 
+	PiCriterion instTypeCriterion = PiCriterion.builder()
+                .matchExact(FabricConstants.STANDARD_METADATA_INSTANCE_TYPE, type)
+                .build();
+        TrafficSelector selector = DefaultTrafficSelector.builder()
+                .matchPi(instTypeCriterion)
+                .build();
         PiActionParam srcMacParam = new PiActionParam(
                 FabricConstants.SRC_MAC,
                 copyFrom(cfg.sinkMac().toBytes()));
@@ -474,6 +482,7 @@ public class IntProgrammableImpl extends AbstractHandlerBehaviour implements Int
                 .build();
 
         return DefaultFlowRule.builder()
+                .withSelector(selector)
                 .withTreatment(treatment)
                 .fromApp(appId)
                 .withPriority(DEFAULT_PRIORITY)

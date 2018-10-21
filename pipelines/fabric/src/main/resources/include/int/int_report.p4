@@ -84,6 +84,7 @@ control process_int_report (
      */
     table tb_generate_report {
         key = {
+            standard_metadata.instance_type : exact;
         }
         actions = {
             do_report_encapsulation;

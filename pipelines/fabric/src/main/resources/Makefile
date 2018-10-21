@@ -7,7 +7,7 @@ fabric-spgw:
 	@./bmv2-compile.sh "fabric-spgw" "-DWITH_SPGW"
 
 fabric-int:
-	@./bmv2-compile.sh "fabric-int" "-DWITH_INT_SOURCE -DWITH_INT_TRANSIT"
+	@./bmv2-compile.sh "fabric-int" "-DWITH_INT_SOURCE -DWITH_INT_TRANSIT -DWITH_INT_SINK"
 
 fabric-spgw-int:
 	@./bmv2-compile.sh "fabric-spgw-int" "-DWITH_SPGW -DWITH_INT_SOURCE -DWITH_INT_TRANSIT"

@@ -677,6 +677,12 @@ tables {
     name: "FabricEgress.process_int_main.process_int_report.tb_generate_report"
     alias: "tb_generate_report"
   }
+  match_fields {
+    id: 1
+    name: "standard_metadata.instance_type"
+    bitwidth: 32
+    match_type: EXACT
+  }
   action_refs {
     id: 16788620
   }

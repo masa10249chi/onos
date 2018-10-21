@@ -5093,7 +5093,7 @@
           ],
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 85,
+            "line" : 87,
             "column" : 12,
             "source_fragment" : "clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID)"
           }
@@ -15661,7 +15661,7 @@
           "id" : 22,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 82,
+            "line" : 84,
             "column" : 11,
             "source_fragment" : "fabric_metadata.int_meta.sink == true"
           },
@@ -16815,7 +16815,14 @@
             "column" : 10,
             "source_fragment" : "tb_generate_report"
           },
-          "key" : [],
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.instance_type",
+              "target" : ["standard_metadata", "instance_type"],
+              "mask" : null
+            }
+          ],
           "match_type" : "exact",
           "type" : "simple",
           "max_size" : 1024,
@@ -17138,7 +17145,7 @@
           "id" : 29,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 98,
+            "line" : 100,
             "column" : 12,
             "source_fragment" : "standard_metadata.ingress_port != 255 && ..."
           },
@@ -17218,7 +17225,7 @@
           "id" : 30,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 102,
+            "line" : 104,
             "column" : 16,
             "source_fragment" : "fabric_metadata.int_meta.source == true"
           },
@@ -17251,7 +17258,7 @@
           "id" : 31,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 106,
+            "line" : 108,
             "column" : 15,
             "source_fragment" : "hdr.int_header.isValid()"
           },
@@ -17400,7 +17407,7 @@
           "id" : 37,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 111,
+            "line" : 113,
             "column" : 20,
             "source_fragment" : "standard_metadata.instance_type == 1"
           },
@@ -17426,7 +17433,7 @@
           "id" : 38,
           "source_info" : {
             "filename" : "include/int/int_main.p4",
-            "line" : 115,
+            "line" : 117,
             "column" : 20,
             "source_fragment" : "fabric_metadata.int_meta.sink == true"
           },

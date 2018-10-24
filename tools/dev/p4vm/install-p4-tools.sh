@@ -39,8 +39,8 @@ DEBUG_FLAGS=${DEBUG_FLAGS:-true}
 LAST_STEP=${1:-all}
 
 function do_requirements {
-    sudo apt update
-    sudo apt-get install -y --no-install-recommends \
+    sudo -E apt update
+    sudo -E apt-get install -y --no-install-recommends \
         autoconf \
         automake \
         bison \
@@ -89,15 +89,15 @@ function do_requirements {
         wget \
         unzip
 
-    sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
+    sudo -E -H pip install setuptools cffi ipaddr ipaddress pypcap
 }
 
 function do_requirements_1404 {
-    sudo apt install -y python-software-properties software-properties-common
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
-    sudo apt update
-    sudo apt install -y \
+    sudo -E apt install -y python-software-properties software-properties-common
+    sudo -E add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    sudo -E add-apt-repository -y ppa:george-edison55/cmake-3.x
+    sudo -E apt update
+    sudo -E apt install -y \
         dpkg-dev \
         g++-4.9 \
         gcc-4.9 \
@@ -105,8 +105,8 @@ function do_requirements_1404 {
         libbz2-dev
 
     # Needed for p4c.
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
+    sudo -E update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50
+    sudo -E update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 
     if [ -z "$(ldconfig -p | grep libboost_iostreams.so.1.58.0)"  ]; then
         do_boost
@@ -114,8 +114,8 @@ function do_requirements_1404 {
 }
 
 function do_requirements_1604 {
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends \
+    sudo -E apt-get update
+    sudo -E apt-get install -y --no-install-recommends \
         ca-certificates \
         g++ \
         libboost-iostreams1.58-dev \
@@ -129,11 +129,11 @@ function do_boost {
     cd boost_1_58_0
 
     ./bootstrap.sh --with-libraries=iostreams
-    sudo ./b2 install
-    sudo ldconfig
+    sudo -E ./b2 install
+    sudo -E ldconfig
 
     cd ..
-    sudo rm -rf boost_1_58_0
+    sudo -E rm -rf boost_1_58_0
 }
 
 function do_protobuf-c {
@@ -144,11 +144,11 @@ function do_protobuf-c {
     ./autogen.sh
     ./configure --prefix=/usr
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 
     cd ..
-    sudo rm -rf protobuf-c
+    sudo -E rm -rf protobuf-c
 }
 
 function do_protobuf {
@@ -166,12 +166,12 @@ function do_protobuf {
     ./autogen.sh
     ./configure --prefix=/usr
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
     unset CFLAGS CXXFLAGS LDFLAGS
 
     cd python
-    sudo python setup.py install --cpp_implementation
+    sudo -E python setup.py install --cpp_implementation
 }
 
 function do_grpc {
@@ -186,12 +186,12 @@ function do_grpc {
 
     export LDFLAGS="-Wl,-s"
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
     unset LDFLAGS
 
-    sudo pip install -r requirements.txt
-    sudo pip install .
+    sudo -E pip install -r requirements.txt
+    sudo -E pip install .
 }
 
 function do_libyang {
@@ -207,8 +207,8 @@ function do_libyang {
     cd build
     cmake ..
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 }
 
 function do_sysrepo_deps {
@@ -234,8 +234,8 @@ function do_sysrepo {
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=Off \
         -DCALL_TARGET_BINS_DIRECTLY=Off ..
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 }
 
 function checkout_bmv2 {
@@ -256,10 +256,10 @@ function do_pi_bmv2_deps {
     cd ${tmpdir}
     bash ../travis/install-thrift.sh
     bash ../travis/install-nanomsg.sh
-    sudo ldconfig
+    sudo -E ldconfig
     bash ../travis/install-nnpy.sh
     cd ..
-    sudo rm -rf $tmpdir
+    sudo -E rm -rf $tmpdir
 }
 
 function do_PI {
@@ -277,11 +277,11 @@ function do_PI {
     # ./configure --with-proto --with-sysrepo
     ./configure --with-proto --without-internal-rpc --without-cli
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 
     # FIXME: re-enable when gNMI support becomes more stable
-    # sudo proto/sysrepo/install_yangs.sh
+    # sudo -E proto/sysrepo/install_yangs.sh
 }
 
 function do_bmv2 {
@@ -294,8 +294,8 @@ function do_bmv2 {
         ./configure --with-pi --disable-elogger --without-nanomsg --disable-logging-macros
     fi
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 
     # Simple_switch_grpc target
     cd targets/simple_switch_grpc
@@ -304,8 +304,8 @@ function do_bmv2 {
     # FIXME: re-enable --with-sysrepo when gNMI support becomes more stable
     # ./configure --with-sysrepo --with-thrift
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 }
 
 function do_p4c {
@@ -322,8 +322,8 @@ function do_p4c {
     cd build
     cmake .. -DENABLE_EBPF=OFF
     make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
+    sudo -E make install
+    sudo -E ldconfig
 }
 
 function do_scapy-vxlan {
@@ -335,7 +335,7 @@ function do_scapy-vxlan {
 
     git pull origin master
 
-    sudo python setup.py install
+    sudo -E python setup.py install
 }
 
 function do_ptf {
@@ -346,7 +346,7 @@ function do_ptf {
     cd ptf
     git pull origin master
 
-    sudo python setup.py install
+    sudo -E python setup.py install
 }
 
 function check_commit {

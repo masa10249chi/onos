@@ -372,9 +372,9 @@ control process_int_transit (
 
     apply {
         tb_int_insert.apply();
-        if (fmeta.int_meta.transit == _FALSE) {
-            return;
-        }
+        // if (fmeta.int_meta.transit == _FALSE) {
+        //    return;
+        // }
         tb_int_inst_0003.apply();
         tb_int_inst_0407.apply();
         // Increment hop cnt
